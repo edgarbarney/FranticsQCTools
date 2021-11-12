@@ -101,7 +101,7 @@ write_error:
 
 				// ignore N_ and F_ files
 				strcpy(szShort, FindData.cFileName);
-				strupr(szShort);
+				strupper(szShort);
 
 				if ((szShort[1] == '_') && ((szShort[0] == 'N') || (szShort[0] == 'F')))
 				{

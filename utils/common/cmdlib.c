@@ -440,7 +440,7 @@ int Q_strcasecmp (char *s1, char *s2)
 }
 
 
-char *strupr (char *start)
+char *strupper (char *start)
 {
 	char	*in;
 	in = start;

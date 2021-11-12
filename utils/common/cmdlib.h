@@ -50,7 +50,7 @@ extern int myargc;
 extern char **myargv;
 
 void COM_FixSlashes( char *pname );
-char *strupr (char *in);
+char *strupper (char *in);
 char *strlower (char *in);
 int Q_strncasecmp (char *s1, char *s2, int n);
 int Q_strcasecmp (char *s1, char *s2);
