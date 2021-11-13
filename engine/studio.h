@@ -32,7 +32,7 @@ Studio models are position independent, so the cache manager can move them.
 #define MAXSTUDIOTRIANGLES	20000	// TODO: tune this
 #define MAXSTUDIOVERTS		2048	// TODO: tune this
 #define MAXSTUDIOSEQUENCES	2048	// total animation sequences -- KSH incremented
-#define MAXSTUDIOSKINS		100		// total textures
+#define MAXSTUDIOSKINS		1024	// total textures
 #define MAXSTUDIOSRCBONES	512		// bones allowed at source movement
 #define MAXSTUDIOBONES		128		// total bones actually used
 #define MAXSTUDIOMODELS		32		// sub-models per model
@@ -43,6 +43,7 @@ Studio models are position independent, so the cache manager can move them.
 #define MAXSTUDIOEVENTS		1024
 #define MAXSTUDIOPIVOTS		256
 #define MAXSTUDIOCONTROLLERS 8
+#define MAXSTUDIOFILESIZE	 32		//FDreamer: Was 16. "X*1024*1024" Bs,
 
 typedef struct 
 {
