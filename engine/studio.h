@@ -333,7 +333,10 @@ typedef struct
 #define STUDIO_NF_NOMIPS        0x0008
 #define STUDIO_NF_ALPHA         0x0010
 #define STUDIO_NF_ADDITIVE      0x0020
-#define STUDIO_NF_MASKED        0x0040
+#define STUDIO_NF_MASKED		0x0040
+//#define STUDIO_NF_PHOLDER		0x0080 // 128
+//#define STUDIO_NF_PHOLDER		0x0100 // 256 = WAS Nomipmap in original Trinity 
+//#define STUDIO_NF_PHOLDER		0x0200 // 512 - WAS Fullbright in original Trinity
 
 // motion flags
 #define STUDIO_X		0x0001

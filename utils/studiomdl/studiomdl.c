@@ -3158,10 +3158,15 @@ void Cmd_SetTextureRendermode( void )
   		texture[iTextureIndex].flags |= STUDIO_NF_MASKED;
   		return;
 	}
+	if (!strcmp(token, "fullbright"))
+	{
+		texture[iTextureIndex].flags |= STUDIO_NF_FULLBRIGHT;
+		return;
+	}
 	else
 	{
   		printf("\n*********ERROR!!!*************\n");
-  		printf("\ninvalid rendermode at $texrendermode, choices are :\nadditive\nmasked\n");
+  		printf("\ninvalid rendermode at $texrendermode, choices are :\nadditive\nmasked\nfullbright\n");
   		exit(1);
 	}
 }
