@@ -1,0 +1,81 @@
+{
+  "Version": 1,
+  "ProjectMap": {
+    "5a257608-0b80-42ed-a037-c2a02e878301": {
+      "ProjectGuid": "5a257608-0b80-42ed-a037-c2a02e878301",
+      "DisplayName": "studiomdl",
+      "ColorIndex": 0
+    },
+    "6cac4d26-13b7-4701-a097-94c01340b345": {
+      "ProjectGuid": "6cac4d26-13b7-4701-a097-94c01340b345",
+      "DisplayName": "vis",
+      "ColorIndex": 1
+    },
+    "01780c5f-55a2-41d4-b27f-6383bb549de4": {
+      "ProjectGuid": "01780c5f-55a2-41d4-b27f-6383bb549de4",
+      "DisplayName": "qlumpy",
+      "ColorIndex": 2
+    },
+    "415a5b85-bea0-4f96-bbb6-5447e4cf726f": {
+      "ProjectGuid": "415a5b85-bea0-4f96-bbb6-5447e4cf726f",
+      "DisplayName": "qbsp2",
+      "ColorIndex": 3
+    },
+    "c47acaca-7da4-4741-a287-9215309949e7": {
+      "ProjectGuid": "c47acaca-7da4-4741-a287-9215309949e7",
+      "DisplayName": "makefont",
+      "ColorIndex": 4
+    },
+    "348ea74b-9e7e-4f35-9474-69a5db1b5a42": {
+      "ProjectGuid": "348ea74b-9e7e-4f35-9474-69a5db1b5a42",
+      "DisplayName": "mdlviewer",
+      "ColorIndex": 5
+    },
+    "a015f691-df6b-4e05-ab3b-4b0a55c13edc": {
+      "ProjectGuid": "a015f691-df6b-4e05-ab3b-4b0a55c13edc",
+      "DisplayName": "qrad",
+      "ColorIndex": 6
+    },
+    "67fab994-bee5-4537-8e00-60259f66f654": {
+      "ProjectGuid": "67fab994-bee5-4537-8e00-60259f66f654",
+      "DisplayName": "mkmovie",
+      "ColorIndex": 7
+    },
+    "2de8c1af-56ae-4b99-8aa5-bedbf33d6216": {
+      "ProjectGuid": "2de8c1af-56ae-4b99-8aa5-bedbf33d6216",
+      "DisplayName": "procinfo",
+      "ColorIndex": 8
+    },
+    "1d9a402b-c7ab-4daa-ad3f-42195f283e64": {
+      "ProjectGuid": "1d9a402b-c7ab-4daa-ad3f-42195f283e64",
+      "DisplayName": "light",
+      "ColorIndex": 9
+    },
+    "2adce88f-5117-4d09-be30-c8cbe902203e": {
+      "ProjectGuid": "2adce88f-5117-4d09-be30-c8cbe902203e",
+      "DisplayName": "sprgen",
+      "ColorIndex": 10
+    },
+    "0f44e796-fafd-4d52-91de-707b5fb27841": {
+      "ProjectGuid": "0f44e796-fafd-4d52-91de-707b5fb27841",
+      "DisplayName": "qcsg",
+      "ColorIndex": 11
+    },
+    "8a13bdb4-772f-4d03-b343-b56a6d412149": {
+      "ProjectGuid": "8a13bdb4-772f-4d03-b343-b56a6d412149",
+      "DisplayName": "xwad",
+      "ColorIndex": 12
+    },
+    "8d9315b8-d428-411b-a60f-6afd3ce0a687": {
+      "ProjectGuid": "8d9315b8-d428-411b-a60f-6afd3ce0a687",
+      "DisplayName": "makels",
+      "ColorIndex": 13
+    },
+    "a2fe74e1-b743-11d0-ae1a-00a0c90fffc3": {
+      "ProjectGuid": "a2fe74e1-b743-11d0-ae1a-00a0c90fffc3",
+      "DisplayName": "Miscellaneous Files",
+      "ColorIndex": -1
+    }
+  },
+  "NextColorIndex": 14
+}
