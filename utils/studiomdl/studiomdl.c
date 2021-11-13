@@ -2617,7 +2617,8 @@ int Cmd_SequenceGroup( )
 int Cmd_SequenceGroupSize( )
 {
 	GetToken (false);
-	maxseqgroupsize = 1024 * atoi( token );
+	printf("WARNING: $sequencegroupsize is deprecated. It is non functional!\n");
+	maxseqgroupsize = 1024 * 1024;
 	return 0;
 }
 
@@ -2827,26 +2828,14 @@ int Cmd_Sequence( )
 */
 int Cmd_Root (void)
 {
-	if (GetToken (false))
-	{
-		strcpyn( pivotname[0], token );
-		return 0;
-	}
-	return 1;
+	GetToken (false);
+	return 0;
 }
 
 int Cmd_Pivot (void)
 {
-	if (GetToken (false))
-	{
-		int index = atoi(token);
-		if (GetToken(false))
-		{
-			strcpyn( pivotname[index], token );
-			return 0;
-		}
-	}
-	return 1;
+	GetToken (false);
+	return 0;
 }
 
 
@@ -3392,10 +3381,10 @@ int main (int argc, char **argv)
 			case 'h':
 				dump_hboxes = 1;
 				break;
-			case 'g':
-				i++;
-				maxseqgroupsize = 1024 * atoi( argv[i] );
-				break;
+			//case 'g':
+			//	i++;
+			//	maxseqgroupsize = 1024 * atoi( argv[i] );
+			//	break;
 			case 'p':
 			case '2':
 				force_powerof2_textures = 1;
