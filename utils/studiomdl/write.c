@@ -477,7 +477,7 @@ void WriteModel( )
 		{
 			VectorCopy( model[i]->normal[normimap[j]].org, pnorm[j] );
 		}
-		printf("vertices  %6d bytes (%d vertices, %d normals)\n", pData - cur, model[i]->numverts, model[i]->numnorms);
+		printf("vertices  %6p bytes (%d vertices, %d normals)\n", pData - cur, model[i]->numverts, model[i]->numnorms);
 		cur = (int)pData;
 
 		// save mesh info
@@ -514,14 +514,14 @@ void WriteModel( )
 			total_tris += pmesh[j].numtris;
 			total_strips += numcommandnodes;
 		}
-		printf("mesh      %6d bytes (%d tris, %d strips)\n", pData - cur, total_tris, total_strips);
+		printf("mesh      %6p bytes (%d tris, %d strips)\n", pData - cur, total_tris, total_strips);
 		cur = (int)pData;
 	}	
 }
 
 
 
-#define FILEBUFFER ( 16 * 1024 * 1024)
+#define FILEBUFFER ( MAXSTUDIOFILESIZE * 1024 * 1024)
 	
 
 void WriteFile (void)
