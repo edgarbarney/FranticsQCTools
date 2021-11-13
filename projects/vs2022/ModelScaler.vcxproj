@@ -24,7 +24,7 @@
     <ProjectGuid>{811fbba6-094c-48c4-af34-2024acc7a58b}</ProjectGuid>
     <RootNamespace>ModelScaler</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
-    <ProjectName>ModelScaler</ProjectName>
+    <ProjectName>modelscaler</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
