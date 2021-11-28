@@ -29,7 +29,6 @@
 #include "lbmlib.h"
 #include "scriplib.h"
 #include "mathlib.h"
-#define EXTERN
 #include "../../engine/studio.h"
 #include "studiomdl.h"
 #include "../../dlls/activity.h"
@@ -50,15 +49,102 @@ void clip_rotations( vec3_t rot );
 */
 
 //Externs
-int numrenamedbones;
-int numhitboxes;
-int numhitgroups;
-int numbonecontrollers;
-int numattachments;
-int numbones;
+char			outname[1024];
+bool			cdset;
+char			cdpartial[256];
+char			cddir[256];
+int				cdtextureset;
+char			cdtexture[16][256];
 
-s_attachment_t attachment[MAXSTUDIOSRCBONES];
-s_bonecontroller_t bonecontroller[MAXSTUDIOSRCBONES];
+char			pivotname[32][256];	// names of the pivot points
+
+float			default_scale;
+float			scale_up;
+float			defaultzrotation;
+float			zrotation;
+
+
+char			defaulttexture[16][256];
+char			sourcetexture[16][256];
+
+int				numrep;
+
+int				tag_reversed;
+int				tag_normals;
+int				flip_triangles;
+float			normal_blend;
+int				dump_hboxes;
+int				ignore_warnings;
+
+vec3_t			eyeposition;
+int				gflags;
+vec3_t			bbox[2];
+vec3_t			cbox[2];
+
+int				maxseqgroupsize;
+
+int				split_textures;
+int				clip_texcoords;
+
+s_bonefixup_t		bonefixup[MAXSTUDIOSRCBONES];
+int					numbones;
+
+s_bonetable_t		bonetable[MAXSTUDIOSRCBONES];
+int					numrenamedbones;
+
+s_renamebone_t		renamedbone[MAXSTUDIOSRCBONES];
+int					numhitboxes;
+
+s_bbox_t			hitbox[MAXSTUDIOSRCBONES];
+int					numhitgroups;
+
+s_hitgroup_t		hitgroup[MAXSTUDIOSRCBONES];
+
+s_bonecontroller_t	bonecontroller[MAXSTUDIOSRCBONES];
+int					numbonecontrollers;
+
+s_attachment_t		attachment[MAXSTUDIOSRCBONES];
+int					numattachments;
+
+char				mirrored[MAXSTUDIOSRCBONES][64];
+int					nummirrored;
+
+int					numani;
+s_animation_t*		panimation[MAXSTUDIOANIMATIONS];
+
+int					numseq;
+
+s_sequence_t		sequence[MAXSTUDIOSEQUENCES];
+int					numseqgroups;
+
+s_sequencegroup_t	sequencegroup[MAXSTUDIOSEQUENCES];
+
+int			numxnodes;
+int			xnode[100][100];
+
+s_texture_t		texture[MAXSTUDIOSKINS];
+int				numtextures;
+float			gamma;
+int				numskinref;
+int				numskinfamilies;
+int				skinref[MAXSTUDIOSKINS][MAXSTUDIOSKINS]; // [skin][skinref], returns texture index
+int				numtexturegroups;
+int				numtexturelayers[32];
+int				numtexturereps[32];
+int				texturegroup[32][32][32];
+
+int				nummodels;
+s_model_t*		model[MAXSTUDIOMODELS];
+
+
+
+vec3_t			adjust;
+vec3_t			defaultadjust;
+
+int				numbodyparts;
+s_bodypart_t	bodypart[MAXSTUDIOBODYPARTS];
+
+//Externs End
 
 int k_memtotal;
 
