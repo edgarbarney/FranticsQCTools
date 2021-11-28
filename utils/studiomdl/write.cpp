@@ -530,7 +530,7 @@ void WriteFile (void)
 	int			total = 0;
 	int			i;
 
-	pStart = kalloc( 1, FILEBUFFER );
+	pStart = static_cast<byte*>(kalloc( 1, FILEBUFFER ));
 
 	StripExtension (outname);
 

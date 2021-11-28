@@ -451,8 +451,8 @@ void SimplifyModel (void)
 					bonetable[k].bonecontroller	= 0;
 					bonetable[k].flags		= 0;
 					// set defaults
-					defaultpos[k] = kalloc( MAXSTUDIOANIMATIONS, sizeof( vec3_t ) );
-					defaultrot[k] = kalloc( MAXSTUDIOANIMATIONS, sizeof( vec3_t ) );
+					defaultpos[k] = static_cast<vec3_t*>(kalloc( MAXSTUDIOANIMATIONS, sizeof( vec3_t ) ));
+					defaultrot[k] = static_cast<vec3_t*>(kalloc(MAXSTUDIOANIMATIONS, sizeof(vec3_t)));
 					for (n = 0; n < MAXSTUDIOANIMATIONS; n++)
 					{
 						VectorCopy( model[i]->skeleton[j].pos, defaultpos[k][n] );
@@ -1010,7 +1010,7 @@ void SimplifyModel (void)
 						}
 						else
 						{
-							sequence[i].panim[q]->anim[j][k] = kalloc( pvalue - data, sizeof( mstudioanimvalue_t ) );
+							sequence[i].panim[q]->anim[j][k] = static_cast<mstudioanimvalue_t*>(kalloc( pvalue - data, sizeof( mstudioanimvalue_t ) ));
 							memmove( sequence[i].panim[q]->anim[j][k], data, (pvalue - data) * sizeof( mstudioanimvalue_t ) );
 						}
 						// printf("%d(%d) ", sequence[i].panim[q]->numanim[j][k], n );
@@ -1168,7 +1168,7 @@ s_mesh_t *lookup_mesh( s_model_t *pmodel, char *texturename )
 	}
 
 	pmodel->nummesh = i + 1;
-	pmodel->pmesh[i] = kalloc( 1, sizeof( s_mesh_t ) );
+	pmodel->pmesh[i] = static_cast<s_mesh_t*>(kalloc( 1, sizeof( s_mesh_t ) ));
 	pmodel->pmesh[i]->skinref = j;
 	
 
@@ -1188,7 +1188,7 @@ s_trianglevert_t *lookup_triangle( s_mesh_t *pmesh, int index )
 			kmemset( &pmesh->triangle[start], 0, (pmesh->alloctris - start) * sizeof( *pmesh->triangle ) );
 		} 
 		else {
-			pmesh->triangle = kalloc( pmesh->alloctris, sizeof( *pmesh->triangle ) );
+			pmesh->triangle = static_cast<s_trianglevert_t(*)[3]>(kalloc( pmesh->alloctris, sizeof( *pmesh->triangle ) ));
 		}
 	}
 
@@ -2173,7 +2173,7 @@ void Option_Studio( )
 {
 	if (!GetToken (false)) return;
 
-	model[nummodels] = kalloc( 1, sizeof( s_model_t ) );
+	model[nummodels] = static_cast<s_model_t*>(kalloc( 1, sizeof( s_model_t ) ));
 	bodypart[numbodyparts].pmodel[bodypart[numbodyparts].nummodels] = model[nummodels];
 
 	strcpyn( model[nummodels]->name, token );
@@ -2207,7 +2207,7 @@ void Option_Studio( )
 
 int Option_Blank( )
 {
-	model[nummodels] = kalloc( 1, sizeof( s_model_t ) );
+	model[nummodels] = static_cast<s_model_t*>(kalloc( 1, sizeof( s_model_t ) ));
 	bodypart[numbodyparts].pmodel[bodypart[numbodyparts].nummodels] = model[nummodels];
 
 	strcpyn( model[nummodels]->name, "blank" );
@@ -2291,8 +2291,8 @@ void Grab_Animation( s_animation_t *panim)
 
 	for (index = 0; index < panim->numbones; index++) 
 	{
-		panim->pos[index] = kalloc( MAXSTUDIOANIMATIONS, sizeof( vec3_t ) );
-		panim->rot[index] = kalloc( MAXSTUDIOANIMATIONS, sizeof( vec3_t ) );
+		panim->pos[index] = static_cast<vec3_t*>(kalloc( MAXSTUDIOANIMATIONS, sizeof( vec3_t ) ));
+		panim->rot[index] = static_cast<vec3_t*>(kalloc( MAXSTUDIOANIMATIONS, sizeof( vec3_t ) ));
 	}
 
 	cz = cos( zrotation );
@@ -2374,8 +2374,8 @@ void Shift_Animation( s_animation_t *panim)
 		k_memtotal -= MAXSTUDIOANIMATIONS * sizeof( vec3_t ) * 2;
 		k_memtotal += size * 2;
 
-		ppos = kalloc( 1, size );
-		prot = kalloc( 1, size );
+		ppos = static_cast<vec3_t*>(kalloc(1, size));
+		prot = static_cast<vec3_t*>(kalloc(1, size));
 
 		memmove( ppos, &panim->pos[j][panim->startframe], size );
 		memmove( prot, &panim->rot[j][panim->startframe], size );
@@ -2795,7 +2795,7 @@ int Cmd_Sequence( )
 	}
 	for (i = 0; i < numblends; i++)
 	{
-		panimation[numani] = kalloc( 1, sizeof( s_animation_t ) );
+		panimation[numani] = static_cast<s_animation_t*>(kalloc( 1, sizeof( s_animation_t ) ));
 		sequence[numseq].panim[i] = panimation[numani];
 		sequence[numseq].panim[i]->startframe = start;
 		sequence[numseq].panim[i]->endframe = end;

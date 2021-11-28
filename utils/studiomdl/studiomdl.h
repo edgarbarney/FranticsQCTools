@@ -71,6 +71,12 @@ extern vec_t Q_rint (vec_t in);
 
 extern void WriteFile (void);
 
+inline void* kalloc(int num, int size)
+{
+	k_memtotal += num * size;
+	return calloc(num, size);
+}
+
 typedef struct {
 	int					vertindex;
 	int					normindex;		// index into normal array
