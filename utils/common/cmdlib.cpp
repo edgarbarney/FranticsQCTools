@@ -245,7 +245,7 @@ char *ExpandPathAndArchive (char *path)
 char *copystring(char *s)
 {
 	char	*b;
-	b = malloc(strlen(s)+1);
+	b = (char*)malloc(strlen(s)+1);
 	strcpy (b, s);
 	return b;
 }
@@ -1003,7 +1003,7 @@ void ListPak(char* pakname)
 	long totlen=0;
 
 	SafeRead(f,&head,sizeof(packheader_t));
-	pdir=malloc(head.dirlen);
+	pdir = new packfile_t[head.dirlen]();
 
 	fseek(f,head.dirofs,SEEK_SET);
 	SafeRead(f,pdir,head.dirlen);

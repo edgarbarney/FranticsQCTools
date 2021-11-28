@@ -78,12 +78,12 @@ ReadBmpFile(
 
 	// Read bitmap bits (remainder of file)
 	cbBmpBits = bmfh.bfSize - ftell(pfile);
-	pbBmpBits = malloc(cbBmpBits);
+	pbBmpBits = (byte*)malloc(cbBmpBits);
 	if (fread(pbBmpBits, cbBmpBits, 1/*count*/, pfile) != 1)
 		{ rc = -7; goto GetOut; }
 
 	// Set output parameters
-	*ppbPalette = malloc(sizeof rgrgbPalette);
+	*ppbPalette = (unsigned char*)malloc(sizeof rgrgbPalette);
 	memcpy(*ppbPalette, rgrgbPalette, cbPalBytes);
 	*ppbBits = pbBmpBits;
 

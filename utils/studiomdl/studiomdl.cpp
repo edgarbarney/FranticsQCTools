@@ -1184,7 +1184,7 @@ s_trianglevert_t *lookup_triangle( s_mesh_t *pmesh, int index )
 		int start = pmesh->alloctris;
 		pmesh->alloctris = index + 256;
 		if (pmesh->triangle) {
-			pmesh->triangle = realloc( pmesh->triangle, pmesh->alloctris * sizeof( *pmesh->triangle ) );
+			pmesh->triangle = (s_trianglevert_t(*)[3])realloc(pmesh->triangle, pmesh->alloctris * sizeof(*pmesh->triangle));
 			kmemset( &pmesh->triangle[start], 0, (pmesh->alloctris - start) * sizeof( *pmesh->triangle ) );
 		} 
 		else {
@@ -1532,7 +1532,7 @@ void ResizeTexture( s_texture_t *ptexture )
 		printf("%.0f %.0f %.0f %.0f\n", ptexture->min_s, ptexture->max_s, ptexture->min_t, ptexture->max_t );
 		Error("texture too large\n");
 	}
-	pdest = malloc( ptexture->size );
+	pdest = (byte*)malloc( ptexture->size );
 	ptexture->pdata = pdest;
 
 	// data is saved as a multiple of 4
