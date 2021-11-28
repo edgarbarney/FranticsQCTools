@@ -71,6 +71,15 @@ extern vec_t Q_rint (vec_t in);
 
 extern void WriteFile (void);
 
+// Fran: Ugh
+#ifndef max
+#define max(a,b)            (((a) > (b)) ? (a) : (b))
+#endif
+
+#ifndef min
+#define min(a,b)            (((a) < (b)) ? (a) : (b))
+#endif
+
 inline void* kalloc(int num, int size)
 {
 	k_memtotal += num * size;
