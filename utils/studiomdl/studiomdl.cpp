@@ -49,6 +49,17 @@ void clip_rotations( vec3_t rot );
 =================
 */
 
+//Externs
+int numrenamedbones;
+int numhitboxes;
+int numhitgroups;
+int numbonecontrollers;
+int numattachments;
+int numbones;
+
+s_attachment_t attachment[MAXSTUDIOSRCBONES];
+s_bonecontroller_t bonecontroller[MAXSTUDIOSRCBONES];
+
 int k_memtotal;
 
 void kmemset( void *ptr, int value, int size )
