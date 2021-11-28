@@ -33,9 +33,9 @@ int myargc;
 char **myargv;
 
 char		com_token[1024];
-qboolean	com_eof;
+bool	com_eof;
 
-qboolean		archive;
+bool		archive;
 char			archivedir[1024];
 
 
@@ -79,7 +79,7 @@ void Error (char *error, ...)
 }
 
 // only printf if in verbose mode
-qboolean verbose = false;
+bool verbose = false;
 void qprintf (char *format, ...)
 {
 	va_list argptr;

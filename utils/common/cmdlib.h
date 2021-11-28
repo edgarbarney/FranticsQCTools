@@ -28,15 +28,6 @@ extern "C"
 
 #ifndef __CMDUTIL__
 #define __CMDUTIL__
-#ifndef _NOENUMQBOOL
-typedef enum {false, true} qboolean;
-#else
-typedef int qboolean;
-#undef true
-#undef false
-#define true 1
-#define false 0
-#endif
 
 typedef unsigned char byte;
 #endif
@@ -107,7 +98,7 @@ long flen(FILE* f);
 char *COM_Parse (char *data);
 
 extern	char		com_token[1024];
-extern	qboolean	com_eof;
+extern	bool	com_eof;
 
 char *copystring(char *s);
 
@@ -119,11 +110,11 @@ unsigned short CRC_Value(unsigned short crcvalue);
 void	CreatePath (char *path);
 void	QCopyFile (char *from, char *to);
 
-extern	qboolean		archive;
+extern	bool		archive;
 extern	char			archivedir[1024];
 
 
-extern	qboolean verbose;
+extern	bool verbose;
 void qprintf (char *format, ...);
 
 
