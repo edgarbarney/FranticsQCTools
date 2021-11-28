@@ -50,13 +50,6 @@ void clip_rotations( vec3_t rot );
 */
 
 int k_memtotal;
-void *kalloc( int num, int size )
-{
-	// printf( "calloc( %d, %d )\n", num, size );
-	// printf( "%d ", num * size );
-	k_memtotal += num * size;
-	return calloc( num, size );
-}
 
 void kmemset( void *ptr, int value, int size )
 {

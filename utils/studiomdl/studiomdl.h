@@ -70,7 +70,6 @@ EXTERN	int			clip_texcoords;
 extern vec_t Q_rint (vec_t in);
 
 extern void WriteFile (void);
-void *kalloc( int num, int size );
 
 typedef struct {
 	int					vertindex;
