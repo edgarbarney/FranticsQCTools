@@ -1277,14 +1277,21 @@ s_mesh_t *lookup_mesh( s_model_t *pmodel, char *texturename )
 
 s_trianglevert_t *lookup_triangle( s_mesh_t *pmesh, int index )
 {
-	if (index >= pmesh->alloctris) {
+	if (index >= pmesh->alloctris) 
+	{
 		int start = pmesh->alloctris;
 		pmesh->alloctris = index + 256;
-		if (pmesh->triangle) {
-			pmesh->triangle = (s_trianglevert_t(*)[3])realloc(pmesh->triangle, pmesh->alloctris * sizeof(*pmesh->triangle));
-			kmemset( &pmesh->triangle[start], 0, (pmesh->alloctris - start) * sizeof( *pmesh->triangle ) );
+		if (pmesh->triangle) 
+		{
+			auto temp = (s_trianglevert_t(*)[3])realloc(pmesh->triangle, pmesh->alloctris * sizeof(*pmesh->triangle));
+			if (temp != NULL)
+			{
+				pmesh->triangle = temp;
+				kmemset( &pmesh->triangle[start], 0, (pmesh->alloctris - start) * sizeof( *pmesh->triangle ) );
+			}
 		} 
-		else {
+		else 
+		{
 			pmesh->triangle = static_cast<s_trianglevert_t(*)[3]>(kalloc( pmesh->alloctris, sizeof( *pmesh->triangle ) ));
 		}
 	}
@@ -1414,7 +1421,8 @@ void TextureCoordRanges( s_mesh_t *pmesh, s_texture_t *ptexture  )
 		{
 			float min_u = 10;
 			float max_u = -10;
-			float k_max_u, n_min_u;
+			float k_max_u = 0.0f;
+			float n_min_u = 0.0f;
 			k = -1;
 			n = -1;
 			for (i=0 ; i<pmesh->numtris ; i++) 
@@ -1447,7 +1455,8 @@ void TextureCoordRanges( s_mesh_t *pmesh, s_texture_t *ptexture  )
 		{
 			float min_v = 10;
 			float max_v = -10;
-			float k_max_v, n_min_v;
+			float k_max_v = 0.0f;
+			float n_min_v = 0.0f;
 			k = -1;
 			n = -1;
 			for (i=0 ; i<pmesh->numtris ; i++) 
@@ -1671,7 +1680,7 @@ void ResizeTexture( s_texture_t *ptexture )
 void Grab_Skin ( s_texture_t *ptexture )
 {
 	char	file1[1024];
-	int		time1;
+	int		time1 = 0;
 
 	sprintf (file1, "%s/%s", cdpartial, ptexture->name);
 	ExpandPathAndArchive (file1);
@@ -2091,6 +2100,7 @@ void Grab_Skeleton( s_node_t *pnodes, s_bone_t *pbones )
 		}
 		else if (sscanf( line, "%s %d", cmd, &index ))
 		{
+			cmd[1023] = 0; // Force string zero termination
 			if (strcmp( cmd, "time" ) == 0) 
 			{
 				// pbones = pnode->bones[index] = kalloc(1, sizeof( s_bones_t ));
@@ -2124,7 +2134,7 @@ int Grab_Nodes( s_node_t *pnodes )
 				Error( "bone \"%s\" exists more than once\n", name );
 			}
 			*/
-			
+			name[1023] = 0; // Force string zero termination
 			strcpyn( pnodes[index].name, name );
 			pnodes[index].parent = parent;
 			numbones = index;
@@ -2163,34 +2173,41 @@ void Grab_Studio ( s_model_t *pmodel )
 
 	printf ("grabbing %s\n", filename);
 
-	if ((input = fopen(filename, "r")) == 0) {
+	if ((input = fopen(filename, "r")) == 0) 
+	{
 		fprintf(stderr,"reader: could not open file '%s'\n", filename);
 	}
-	linecount = 0;
+	else
+	{
+		linecount = 0;
 
-	while (fgets( line, sizeof( line ), input ) != NULL) {
-		linecount++;
-		sscanf( line, "%s %d", cmd, &option );
-		if (strcmp( cmd, "version" ) == 0) {
-			if (option != 1) {
-				Error("bad version\n");
+		while (fgets( line, sizeof( line ), input ) != NULL) {
+			linecount++;
+			if (sscanf( line, "%s %d", cmd, &option ))
+			{
+				cmd[1023] = 0; // Force string zero termination
+				if (strcmp( cmd, "version" ) == 0) {
+					if (option != 1) {
+						Error("bad version\n");
+					}
+				}
+				else if (strcmp( cmd, "nodes" ) == 0) {
+					pmodel->numbones = Grab_Nodes( pmodel->node );
+				}
+				else if (strcmp( cmd, "skeleton" ) == 0) {
+					Grab_Skeleton( pmodel->node, pmodel->skeleton );
+				}
+				else if (strcmp( cmd, "triangles" ) == 0) {
+					Grab_Triangles( pmodel );
+				}
+				else 
+				{
+					printf("unknown studio command\n" );
+				}
 			}
 		}
-		else if (strcmp( cmd, "nodes" ) == 0) {
-			pmodel->numbones = Grab_Nodes( pmodel->node );
-		}
-		else if (strcmp( cmd, "skeleton" ) == 0) {
-			Grab_Skeleton( pmodel->node, pmodel->skeleton );
-		}
-		else if (strcmp( cmd, "triangles" ) == 0) {
-			Grab_Triangles( pmodel );
-		}
-		else 
-		{
-			printf("unknown studio command\n" );
-		}
+		fclose(input);
 	}
-	fclose( input );
 }
 
 
@@ -2431,6 +2448,7 @@ void Grab_Animation( s_animation_t *panim)
 		}
 		else if (sscanf( line, "%s %d", cmd, &index ))
 		{
+			cmd[1023] = 0; // Force string zero termination
 			if (strcmp( cmd, "time" ) == 0) 
 			{
 				t = index;
@@ -2502,38 +2520,51 @@ void Option_Animation ( char *name, s_animation_t *panim )
 
 	printf ("grabbing %s\n", filename);
 
-	if ((input = fopen(filename, "r")) == 0) {
+	if ((input = fopen(filename, "r")) == 0) 
+	{
 		fprintf(stderr,"reader: could not open file '%s'\n", filename);
 		Error(0);
 	}
-	linecount = 0;
+	else
+	{
 
-	while (fgets( line, sizeof( line ), input ) != NULL) {
-		linecount++;
-		sscanf( line, "%s %d", cmd, &option );
-		if (strcmp( cmd, "version" ) == 0) {
-			if (option != 1) {
-				Error("bad version\n");
-			}
-		}
-		else if (strcmp( cmd, "nodes" ) == 0) {
-			panim->numbones = Grab_Nodes( panim->node );
-		}
-		else if (strcmp( cmd, "skeleton" ) == 0) {
-			Grab_Animation( panim );
-			Shift_Animation( panim );
-		}
-		else 
+		linecount = 0;
+
+		while (fgets( line, sizeof( line ), input ) != NULL) 
 		{
-			printf("unknown studio command : %s\n", cmd );
-			while (fgets( line, sizeof( line ), input ) != NULL) {
-				linecount++;
-				if (strncmp(line,"end",3)==0)
-					break;
+			linecount++;
+			if (sscanf( line, "%s %d", cmd, &option ))
+			{
+				cmd[1023] = 0; // Force string zero termination
+				if (strcmp( cmd, "version" ) == 0) 
+				{
+					if (option != 1) {
+						Error("bad version\n");
+					}
+				}
+				else if (strcmp( cmd, "nodes" ) == 0) 
+				{
+					panim->numbones = Grab_Nodes( panim->node );
+				}
+				else if (strcmp( cmd, "skeleton" ) == 0) 
+				{
+					Grab_Animation( panim );
+					Shift_Animation( panim );
+				}
+				else 
+				{
+					printf("unknown studio command : %s\n", cmd );
+					while (fgets( line, sizeof( line ), input ) != NULL) 
+					{
+						linecount++;
+						if (strncmp(line,"end",3)==0)
+							break;
+					}
+				}
 			}
 		}
+		fclose( input );
 	}
-	fclose( input );
 }
 
 
@@ -2733,7 +2764,7 @@ int lookupActivity( char *szActivity )
 int Cmd_Sequence( )
 {
 	int depth = 0;
-	char smdfilename[MAXSTUDIOGROUPS][1024];
+	auto smdfilename = new char[MAXSTUDIOGROUPS][1024]; //Moved HUGE 2D String array to heap
 	int i;
 	int numblends = 0;
 	int start = 0;
@@ -2903,6 +2934,9 @@ int Cmd_Sequence( )
 	sequence[numseq].numblends = numblends;
 
 	numseq++;
+
+	//Deallocate 2D Array
+	delete[] smdfilename;
 
 	return 0;
 }
@@ -3457,7 +3491,7 @@ int main (int argc, char **argv)
 					strcpy ( sourcetexture[numrep], argv[i]);
 					printf ("Replaceing %s with %s\n", sourcetexture[numrep], defaulttexture[numrep] );
 				}
-				printf ("Using default texture: %s\n", defaulttexture);
+				printf ("Using default texture: %s\n", defaulttexture[numrep]);
 				numrep++;
 				break;
 			case 'r':
