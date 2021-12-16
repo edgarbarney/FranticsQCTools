@@ -86,6 +86,8 @@ int				maxseqgroupsize;
 int				split_textures;
 int				clip_texcoords;
 
+bool				scale_hitboxes;
+
 s_bonefixup_t		bonefixup[MAXSTUDIOSRCBONES];
 int					numbones;
 
@@ -2238,7 +2240,7 @@ void clip_rotations( vec3_t rot )
 Cmd_Eyeposition
 =================
 */
-void Cmd_Eyeposition (void)
+void Cmd_Eyeposition()
 {
 // rotate points into frame of reference so model points down the positive x
 // axis
@@ -2250,6 +2252,20 @@ void Cmd_Eyeposition (void)
 
 	GetToken (false);
 	eyeposition[2] = atof (token);
+}
+
+void Cmd_Eyeposition_Scale()
+{
+	// rotate points into frame of reference so model points down the positive x
+	// axis
+	GetToken(false);
+	eyeposition[1] = atof(token) * scale_up;
+
+	GetToken(false);
+	eyeposition[0] = -atof(token) * scale_up;
+
+	GetToken(false);
+	eyeposition[2] = atof(token) * scale_up;
 }
 
 
@@ -3007,7 +3023,7 @@ int Cmd_Controller (void)
 =================
 =================
 */
-void Cmd_BBox (void)
+void Cmd_BBox()
 {
 	GetToken (false);
 	bbox[0][0] = atof( token );
@@ -3028,11 +3044,33 @@ void Cmd_BBox (void)
 	bbox[1][2] = atof( token );
 }
 
+void Cmd_BBox_Scale()
+{
+	GetToken(false);
+	bbox[0][0] = atof(token) * scale_up;
+
+	GetToken(false);
+	bbox[0][1] = atof(token) * scale_up;
+
+	GetToken(false);
+	bbox[0][2] = atof(token) * scale_up;
+
+	GetToken(false);
+	bbox[1][0] = atof(token) * scale_up;
+
+	GetToken(false);
+	bbox[1][1] = atof(token) * scale_up;
+
+	GetToken(false);
+	bbox[1][2] = atof(token) * scale_up;
+}
+
+
 /*
 =================
 =================
 */
-void Cmd_CBox (void)
+void Cmd_CBox()
 {
 	GetToken (false);
 	cbox[0][0] = atof( token );
@@ -3051,6 +3089,27 @@ void Cmd_CBox (void)
 
 	GetToken (false);
 	cbox[1][2] = atof( token );
+}
+
+void Cmd_CBox_Scale()
+{
+	GetToken(false);
+	cbox[0][0] = atof(token) * scale_up;
+
+	GetToken(false);
+	cbox[0][1] = atof(token) * scale_up;
+
+	GetToken(false);
+	cbox[0][2] = atof(token) * scale_up;
+
+	GetToken(false);
+	cbox[1][0] = atof(token) * scale_up;
+
+	GetToken(false);
+	cbox[1][1] = atof(token) * scale_up;
+
+	GetToken(false);
+	cbox[1][2] = atof(token) * scale_up;
 }
 
 
@@ -3183,6 +3242,30 @@ int Cmd_Hitbox( )
 	return 0;
 }
 
+int Cmd_Hitbox_Scale()
+{
+	GetToken(false);
+	hitbox[numhitboxes].group = atoi(token);
+	GetToken(false);
+	strcpyn(hitbox[numhitboxes].name, token);
+	GetToken(false);
+	hitbox[numhitboxes].bmin[0] = atof(token) * scale_up;
+	GetToken(false);
+	hitbox[numhitboxes].bmin[1] = atof(token) * scale_up;
+	GetToken(false);
+	hitbox[numhitboxes].bmin[2] = atof(token) * scale_up;
+	GetToken(false);
+	hitbox[numhitboxes].bmax[0] = atof(token) * scale_up;
+	GetToken(false);
+	hitbox[numhitboxes].bmax[1] = atof(token) * scale_up;
+	GetToken(false);
+	hitbox[numhitboxes].bmax[2] = atof(token) * scale_up;
+
+	numhitboxes++;
+
+	return 0;
+}
+
 
 /*
 =================
@@ -3211,6 +3294,34 @@ int Cmd_Attachment( )
 
 	if (TokenAvailable())
 		GetToken (false);
+
+	numattachments++;
+	return 0;
+}
+
+int Cmd_Attachment_Scale()
+{
+	// index
+	GetToken(false);
+	attachment[numattachments].index = atoi(token);
+
+	// bone name
+	GetToken(false);
+	strcpyn(attachment[numattachments].bonename, token);
+
+	// position
+	GetToken(false);
+	attachment[numattachments].org[0] = atof(token) * scale_up;
+	GetToken(false);
+	attachment[numattachments].org[1] = atof(token) * scale_up;
+	GetToken(false);
+	attachment[numattachments].org[2] = atof(token) * scale_up;
+
+	if (TokenAvailable())
+		GetToken(false);
+
+	if (TokenAvailable())
+		GetToken(false);
 
 	numattachments++;
 	return 0;
@@ -3279,7 +3390,7 @@ void Cmd_SetTextureRendermode( void )
 	}
 	else if(!strcmp(token, "masked"))
 	{
-  		texture[iTextureIndex].flags |= STUDIO_NF_MASKED;
+  		texture[iTextureIndex].flags |= STUDIO_NF_ALPHATEST;
   		return;
 	}
 	if (!strcmp(token, "fullbright"))
@@ -3343,7 +3454,11 @@ void ParseScript (void)
 		{
 			Cmd_ScaleUp ();
 		}
-
+		else if (!strcmp(token, "$fullscale"))
+		{
+			scale_hitboxes = true;
+			Cmd_ScaleUp();
+		}
 		else if (!strcmp (token, "$root"))
 		{
 			Cmd_Root ();
@@ -3385,7 +3500,10 @@ void ParseScript (void)
 
 		else if (!strcmp (token, "$eyeposition"))
 		{
-			Cmd_Eyeposition ();
+			if (scale_hitboxes)
+				Cmd_Eyeposition_Scale();
+			else
+				Cmd_Eyeposition();
 		}
 
 		else if (!strcmp (token, "$origin"))
@@ -3395,11 +3513,17 @@ void ParseScript (void)
 
 		else if (!strcmp (token, "$bbox"))
 		{
-			Cmd_BBox ();
+			if (scale_hitboxes)
+				Cmd_BBox_Scale();
+			else
+				Cmd_BBox();
 		}
 		else if (!strcmp (token, "$cbox"))
 		{
-			Cmd_CBox ();
+			if (scale_hitboxes)
+				Cmd_CBox_Scale();
+			else
+				Cmd_CBox();
 		}
 		else if (!strcmp (token, "$mirrorbone"))
 		{
@@ -3424,11 +3548,17 @@ void ParseScript (void)
 		}
 		else if (!strcmp (token, "$hbox"))
 		{
-			Cmd_Hitbox ();
+			if(scale_hitboxes)
+				Cmd_Hitbox_Scale();
+			else
+				Cmd_Hitbox();
 		}
 		else if (!strcmp (token, "$attachment"))
 		{
-			Cmd_Attachment ();
+			if (scale_hitboxes)
+				Cmd_Attachment_Scale();
+			else
+				Cmd_Attachment();
 		}
 		else if (!strcmp (token, "$externaltextures"))
 		{
@@ -3448,7 +3578,7 @@ void ParseScript (void)
   		}
   		else
 		{
-			Error ("bad command %s\n", token);
+			Error ("bad command \"%s\". Are you using a deprecated one? \n", token);
 		}
 
 	}

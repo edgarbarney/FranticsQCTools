@@ -59,6 +59,8 @@ extern int			maxseqgroupsize;
 extern int			split_textures;
 extern int			clip_texcoords;
 
+extern bool			scale_hitboxes;
+
 #define ROLL	2
 #define PITCH	0
 #define YAW		1
