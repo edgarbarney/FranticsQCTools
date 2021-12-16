@@ -19,6 +19,7 @@
 #ifndef _STUDIO_H_
 #define _STUDIO_H_
 
+#pragma warning( disable: 4966 )
 /*
 ==============================================================================
 
@@ -29,16 +30,17 @@ Studio models are position independent, so the cache manager can move them.
 */
  
 
-#define MAXSTUDIOTRIANGLES	20000	// TODO: tune this
-#define MAXSTUDIOVERTS		2048	// TODO: tune this
-#define MAXSTUDIOSEQUENCES	2048	// total animation sequences -- KSH incremented
+
+#define MAXSTUDIOTRIANGLES	20000	// TODO: tune this - Trinity: 4096
+#define MAXSTUDIOVERTS		8196	// TODO: tune this - Trinity: 8196
+#define MAXSTUDIOSEQUENCES	2048	// total animation sequences -- KSH incremented  - Trinity:256
 #define MAXSTUDIOSKINS		1024	// total textures
 #define MAXSTUDIOSRCBONES	512		// bones allowed at source movement
 #define MAXSTUDIOBONES		128		// total bones actually used
 #define MAXSTUDIOMODELS		32		// sub-models per model
 #define MAXSTUDIOBODYPARTS	32
 #define MAXSTUDIOGROUPS		16
-#define MAXSTUDIOANIMATIONS	2048		
+#define MAXSTUDIOANIMATIONS	2048	// per sequence - Trinity:512
 #define MAXSTUDIOMESHES		256
 #define MAXSTUDIOEVENTS		1024
 #define MAXSTUDIOPIVOTS		256
@@ -53,12 +55,12 @@ typedef struct
 	char				name[64];
 	int					length;
 
-	vec3_t				eyeposition;	// ideal eye position
-	vec3_t				min;			// ideal movement hull size
-	vec3_t				max;			
+	Vector				eyeposition;	// ideal eye position
+	Vector				min;			// ideal movement hull size
+	Vector				max;			
 
-	vec3_t				bbmin;			// clipping bounding box
-	vec3_t				bbmax;		
+	Vector				bbmin;			// clipping bounding box
+	Vector				bbmax;		
 
 	int					flags;
 
@@ -138,8 +140,8 @@ typedef struct
 {
 	int					bone;
 	int					group;			// intersection group
-	vec3_t				bbmin;		// bounding box
-	vec3_t				bbmax;		
+	Vector				bbmin;		// bounding box
+	Vector				bbmax;
 } mstudiobbox_t;
 
 #if !defined( CACHE_USER ) && !defined( QUAKEDEF_H )
@@ -157,8 +159,12 @@ typedef struct
 {
 	char				label[32];	// textual name
 	char				name[64];	// file name
+	cache_user_t		cache;		// cache index pointer
+	int					data;		// hack for group 0
+	/* Trinity Removed
     int32				unused1;    // was "cache"  - index pointer
 	int					unused2;    // was "data" -  hack for group 0
+	*/
 } mstudioseqgroup_t;
 
 // sequence descriptions
@@ -182,12 +188,12 @@ typedef struct
 
 	int					motiontype;	
 	int					motionbone;
-	vec3_t				linearmovement;
+	Vector				linearmovement;
 	int					automoveposindex;
 	int					automoveangleindex;
 
-	vec3_t				bbmin;		// per sequence bounding box
-	vec3_t				bbmax;		
+	Vector				bbmin;		// per sequence bounding box
+	Vector				bbmax;
 
 	int					numblends;
 	int					animindex;		// mstudioanim_t pointer relative to start of sequence group data
@@ -222,7 +228,7 @@ typedef struct
 // pivots
 typedef struct 
 {
-	vec3_t				org;	// pivot point
+	Vector				org;	// pivot point
 	int					start;
 	int					end;
 } mstudiopivot_t;
@@ -233,8 +239,8 @@ typedef struct
 	char				name[32];
 	int					type;
 	int					bone;
-	vec3_t				org;	// attachment point
-	vec3_t				vectors[3];
+	Vector				org;	// attachment point
+	Vector				vectors[3];
 } mstudioattachment_t;
 
 typedef struct
@@ -293,17 +299,17 @@ typedef struct
 
 	int					numverts;		// number of unique vertices
 	int					vertinfoindex;	// vertex bone info
-	int					vertindex;		// vertex vec3_t
+	int					vertindex;		// vertex Vector
 	int					numnorms;		// number of unique surface normals
 	int					norminfoindex;	// normal bone info
-	int					normindex;		// normal vec3_t
+	int					normindex;		// normal Vector
 
 	int					numgroups;		// deformation groups
 	int					groupindex;
 } mstudiomodel_t;
 
 
-// vec3_t	boundingbox[model][bone][2];	// complex intersection info
+// Vector	boundingbox[model][bone][2];	// complex intersection info
 
 
 // meshes
@@ -313,7 +319,7 @@ typedef struct
 	int					triindex;
 	int					skinref;
 	int					numnorms;		// per mesh normals
-	int					normindex;		// normal vec3_t
+	int					normindex;		// normal Vector
 } mstudiomesh_t;
 
 // triangles
@@ -327,16 +333,30 @@ typedef struct
 #endif
 
 // lighting options
-#define STUDIO_NF_FLATSHADE		0x0001
-#define STUDIO_NF_CHROME		0x0002
-#define STUDIO_NF_FULLBRIGHT	0x0004
-#define STUDIO_NF_NOMIPS        0x0008
-#define STUDIO_NF_ALPHA         0x0010
-#define STUDIO_NF_ADDITIVE      0x0020
-#define STUDIO_NF_MASKED		0x0040
-//#define STUDIO_NF_PHOLDER		0x0080 // 128
-//#define STUDIO_NF_PHOLDER		0x0100 // 256 = WAS Nomipmap in original Trinity 
-//#define STUDIO_NF_PHOLDER		0x0200 // 512 - WAS Fullbright in original Trinity
+#define STUDIO_NF_FLATSHADE			0x0001 // 1
+#define STUDIO_NF_CHROME			0x0002 // 2
+#define STUDIO_NF_FULLBRIGHT		0x0004 // 4
+#define STUDIO_NF_NOMIPS			0x0008 // 8
+#define STUDIO_NF_ALPHA				0x0010 // 16
+#define STUDIO_NF_ADDITIVE			0x0020 // 32
+#define STUDIO_NF_ALPHATEST			0x0040 // 64
+//#define STUDIO_NF_PHOLDER			0x0080 // 128
+//#define STUDIO_NF_PHOLDER			0x0100 // 256 = WAS Nomipmap in original Trinity 
+//#define STUDIO_NF_PHOLDER			0x0200 // 512 - WAS Fullbright in original Trinity
+#define STUDIO_NF_NOMIPMAP      	0x0008 // 1024
+/*
+- SOHL -
+#define STUDIO_NF_FULLBRIGHT		0x0004
+#define STUDIO_NF_NOMIPS        	0x0008
+#define STUDIO_NF_ALPHA         	0x0010
+#define STUDIO_NF_ADDITIVE      	0x0020
+#define STUDIO_NF_MASKED        	0x0040
+- TRINITY -
+#define STUDIO_NF_ADDITIVE		32 // buz
+#define STUDIO_NF_ALPHATEST		64 // buz
+#define STUDIO_NF_FULLBRIGHT		512
+#define STUDIO_NF_NOMIPMAP		256
+*/
 
 // motion flags
 #define STUDIO_X		0x0001

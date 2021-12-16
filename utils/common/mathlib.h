@@ -27,6 +27,8 @@ typedef float vec_t;
 typedef vec_t vec3_t[3];	// x,y,z
 typedef vec_t vec4_t[4];	// x,y,z,w
 
+typedef vec3_t   Vector;	// x,y,z
+
 #define	SIDE_FRONT		0
 #define	SIDE_ON			2
 #define	SIDE_BACK		1
