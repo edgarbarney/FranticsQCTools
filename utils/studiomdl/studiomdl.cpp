@@ -1387,9 +1387,15 @@ void TextureCoordRanges( s_mesh_t *pmesh, s_texture_t *ptexture  )
 				pmesh->triangle[i][j].s = 0;
 				pmesh->triangle[i][j].t = 0;
 			}
+			/*
 			ptexture->max_s = 63;
 			ptexture->min_s = 0;
 			ptexture->max_t = 63;
+			ptexture->min_t = 0;
+			*/
+			ptexture->max_s = ptexture->srcwidth - 1;
+			ptexture->min_s = 0;
+			ptexture->max_t = ptexture->srcheight - 1;
 			ptexture->min_t = 0;
 		}
 		return;
@@ -3398,10 +3404,15 @@ void Cmd_SetTextureRendermode( void )
 		texture[iTextureIndex].flags |= STUDIO_NF_FULLBRIGHT;
 		return;
 	}
+	if (!strcmp(token, "chrome"))
+	{
+		texture[iTextureIndex].flags |= STUDIO_NF_CHROME;
+		return;
+	}
 	else
 	{
   		printf("\n*********ERROR!!!*************\n");
-  		printf("\ninvalid rendermode at $texrendermode, choices are :\nadditive\nmasked\nfullbright\n");
+  		printf("\ninvalid rendermode at $texrendermode, choices are :\nadditive\nmasked\nfullbright\nchrome\n");
   		exit(1);
 	}
 }
